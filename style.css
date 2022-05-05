@@ -1,8 +1,18 @@
+@font-face {
+    font-family: 'Star Jedi';
+    src: url('fonts/StarJedi.woff2') format('woff2'),
+    url('fonts/StarJedi.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 body {
-    background-image: url('images/background_MQ.jpg');
+    background-image: url('images/background_LQ.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
+    font-family:  sans-serif;
 }
 .container {
     border-style: solid;
@@ -17,4 +27,62 @@ body {
     padding: 10px;
     max-width: 80%;
     width: fit-content;
+}
+
+.swColor {
+    color: #FFE81F;
+}
+
+.swFont {
+    font-family:  "Star Jedi", sans-serif;
+}
+
+.MBFlex {
+    margin: 0.5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.MBFlex > span {
+    align-self: flex-start;
+}
+
+.MBFlex > button {
+    margin: 3px;
+    align-self: flex-start;
+    border-style : none;
+    background: #0000;
+    color: #FFF;
+    font-size: large;
+    font-family: sans-serif;
+}
+
+@media screen and (max-width: 800px){
+    .MBFlex {
+        flex-direction: column;
+    }
+    @media screen and (max-height: 500px){
+        .container {
+            background-color: red;
+        }
+    }
+}
+
+@media screen and (max-height: 350px){
+    .container {
+        background-color: red;
+    }
+}
+
+@media screen and (min-width: 1326px), screen and (min-height: 1080px){
+    body {
+        background-image: url('images/background_MQ.jpg');
+    }
+}
+
+@media screen and (min-width: 2652px), screen and (min-height: 2160px){
+    body {
+        background-image: url('images/background_HQ.jpg');
+    }
 }

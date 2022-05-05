@@ -1,3 +1,8 @@
+let ep_ids = [4, 5, 6, 1, 2, 3];
+let eps_info = [];
+let starships_info = [];
+//const BASE_ADDRESS = 'https://swapi.dev/api/'
+const BASE_ADDRESS = 'cache/'
 let MovieInfo = {
     _title : "",
     _episode_id : 0,
@@ -48,7 +53,7 @@ let MovieInfo = {
                 });
             }
         }
-        return fetch('https://swapi.dev/api/films/'+movie_id)
+        return fetch(BASE_ADDRESS+'films/'+movie_id)
             .then(response => {
                 if(!response.ok)
                     throw new Error('Network response was not ok');
@@ -58,7 +63,15 @@ let MovieInfo = {
                 this._title = info['title'];
                 this._episode_id = info['episode_id'];
                 this._release_date = info['release_date'];
-                this._starships = info['starships'];
+                //this._starships = info['starships'];
+                this._starships = [];
+                info['starships'].forEach(starship => {
+                    let starshipId = (new URL(starship)).pathname.split('/')[3];
+                    this._starships.push(starshipId);
+                    if(starships_info[starshipId] === undefined)
+                        console.log("should fetch");
+                });
+                console.log(this._starships);
                 //console.log(this.toString());
                 //console.log(this.starships);
                 //console.log(info);
@@ -69,20 +82,19 @@ let MovieInfo = {
             })
     }
 };
-let ep_ids = [4, 5, 6, 1, 2, 3];
-let eps_info = new Array(6);
 
 function fetch_info() {
     return new Promise(function (resolve, reject) {
         let promises = new Array(6);
         let i = 0;
         ep_ids.forEach(ep_id => {
-            eps_info[i] = Object.create(MovieInfo);
-            let p = eps_info[i].fetch_info(ep_id);
+            let temp_info = Object.create(MovieInfo);
+            let p = temp_info.fetch_info(ep_id);
             promises.push(p);
             p
                 .then( response => {
                     console.log(response);
+                    eps_info[temp_info.episode_id] = temp_info;
                 })
                 .catch(error => {
                     reject(error);
@@ -94,14 +106,27 @@ function fetch_info() {
 }
 
 function load_movie_menu() {
-    let box = document.getElementById('mainBox');
+    let box = document.getElementById("mainBox");
+    let title = document.createElement("h1");
+    title.classList.add("swColor");
+    title.innerText = "Movies";
+    box.appendChild(title);
     let list = document.createElement("ul");
     eps_info.forEach(ep_info => {
         let item = document.createElement("li");
-        let itemString = document.createElement("p");
+        item.classList.add("swFont");
+        item.classList.add("swColor");
+        let fBox = document.createElement("div");
+        fBox.classList.add("MBFlex");
+        let itemString = document.createElement("span");
         itemString.innerText = ep_info.toString();
-        item.appendChild(itemString);
+        let starShipBtn = document.createElement("button");
+        starShipBtn.innerText = "Starships";
+        fBox.appendChild(itemString);
+        fBox.appendChild(starShipBtn);
+        item.appendChild(fBox);
         list.appendChild(item);
+
     })
     box.appendChild(list);
 }
