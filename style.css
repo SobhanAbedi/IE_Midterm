@@ -1,3 +1,7 @@
+:root {
+    --sw-yello: #FFE81F;
+}
+
 @font-face {
     font-family: 'Star Jedi';
     src: url('fonts/StarJedi.woff2') format('woff2'),
@@ -13,7 +17,13 @@ body {
     background-attachment: fixed;
     background-position: center;
     font-family:  sans-serif;
+
 }
+
+h1 {
+    margin: 0.5em;
+}
+
 .container {
     border-style: solid;
     border-color: grey;
@@ -26,7 +36,16 @@ body {
     transform: translate(-50%, -50%);
     padding: 10px;
     max-width: 80%;
+    min-width: 350px;
     width: fit-content;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+.btn:hover {
+    filter: brightness(90%);
 }
 
 .swColor {
@@ -35,6 +54,10 @@ body {
 
 .swFont {
     font-family:  "Star Jedi", sans-serif;
+}
+
+.whiteColor {
+    color: #FFF;
 }
 
 .MBFlex {
@@ -48,7 +71,7 @@ body {
     align-self: flex-start;
 }
 
-.MBFlex > button {
+.starshipBtn {
     margin: 3px;
     align-self: flex-start;
     border-style : none;
@@ -58,9 +81,91 @@ body {
     font-family: sans-serif;
 }
 
+#starshipFlex {
+    justify-content: space-around;
+}
+
+#BTM_Btn {
+    writing-mode: vertical-rl;
+    margin: auto;
+    padding: 0.5em;
+}
+
+#starshipListContainer {
+    display: inline-block;
+    align-self: flex-start;
+    margin: 0.5em;
+    flex-grow: 1;
+    flex-basis: fit-content;
+}
+
+#starshipList > li {
+    color: lime;
+    padding: 0.1em;
+    margin: 0.2em;
+}
+
+#starshipBox {
+    display: inline-block;
+    align-self: flex-start;
+    flex-grow: 1;
+    flex-basis: fit-content;
+    margin: 0.5em;
+}
+
+#prevBtn , #nextBtn {
+    display: inline-block;
+    color: white;
+    padding: 0.5em;
+}
+
+#prevBtn {
+    float: left;
+    margin: 0.5em 0.5em 0.5em 2.5em;
+}
+
+#nextBtn {
+    float: right;
+    margin: 0.5em 2.5em 0.5em 0.5em;
+
+}
+
+#SBFlex {
+    margin: 0.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.starshipInfo, .movieLink {
+    border-radius: 0.5em;
+    padding: 0.33em;
+    margin: 0.2em;
+    flex-basis: fit-content;
+}
+
+.starshipInfo {
+    color: white;
+    background-color: purple;
+}
+
+.movieLink {
+    background-color: #eed816;
+    font-family:  "Star Jedi", sans-serif;
+    color: white;
+}
+
 @media screen and (max-width: 800px){
     .MBFlex {
         flex-direction: column;
+    }
+    #BTM_Btn {
+        writing-mode: horizontal-tb;
+    }
+    #SBFlex {
+        flex-direction: row;
     }
     @media screen and (max-height: 500px){
         .container {

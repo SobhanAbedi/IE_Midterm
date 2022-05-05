@@ -1,7 +1,15 @@
-let ep_ids = [4, 5, 6, 1, 2, 3];
+let ep_ids = [];
+ep_ids[1] = 4;
+ep_ids[2] = 5;
+ep_ids[3] = 6;
+ep_ids[4] = 1;
+ep_ids[5] = 2;
+ep_ids[6] = 3;
 let eps_info = [];
 let starships_info = [];
-
+let page = 0;
+let cur_movie_id = 0;
+const MAX_LIST_ITEMS = 10;
 //const BASE_ADDRESS = 'https://swapi.dev/api/'
 const BASE_ADDRESS = 'cache/'
 
@@ -200,11 +208,11 @@ function fetch_info() {
 }
 
 function load_movie_menu() {
+    cur_movie_id = 0;
     let box = document.getElementById("mainBox");
     let title = document.createElement("h1");
     title.classList.add("swColor");
     title.innerText = "Movies";
-    box.appendChild(title);
     let list = document.createElement("ul");
     eps_info.forEach(ep_info => {
         let item = document.createElement("li");
@@ -214,15 +222,154 @@ function load_movie_menu() {
         fBox.classList.add("MBFlex");
         let itemString = document.createElement("span");
         itemString.innerText = ep_info.toString();
-        let starShipBtn = document.createElement("button");
-        starShipBtn.innerText = "Starships";
+        let starshipBtn = document.createElement("button");
+        starshipBtn.classList.add("starshipBtn");
+        starshipBtn.classList.add("btn");
+        starshipBtn.innerText = "Starships";
+        starshipBtn.onclick = () => {
+            cur_movie_id = ep_info.episode_id;
+            load_starship_menu();
+        };
         fBox.appendChild(itemString);
-        fBox.appendChild(starShipBtn);
+        fBox.appendChild(starshipBtn);
         item.appendChild(fBox);
         list.appendChild(item);
 
     })
-    box.appendChild(list);
+    box.replaceChildren(title, list);
+}
+
+function load_starship_list() {
+    if(page < 0) {
+        page = 0;
+    }
+    let shipCount = eps_info[cur_movie_id].starships.length;
+    if(shipCount <= page * MAX_LIST_ITEMS)
+        page--;
+    let list = document.getElementById("starshipList");
+    list.replaceChildren();
+
+    let prevBtn = document.getElementById("prevBtn");
+    if(page === 0)
+        prevBtn.style.display = "none";
+    else
+        prevBtn.style.display = "inline-block";
+    let nextBtn = document.getElementById("nextBtn");
+    if(shipCount <= (page+1) * MAX_LIST_ITEMS)
+        nextBtn.style.display = "none";
+    else
+        nextBtn.style.display = "inline-block";
+
+    let count = (page+1) * MAX_LIST_ITEMS;
+    eps_info[cur_movie_id].starships.forEach(starship => {
+        count--;
+        if(count < MAX_LIST_ITEMS && count >= 0) {
+            let item = document.createElement('li');
+            let index = parseInt(starship);
+            item.innerText = starships_info[index].name;
+            item.classList.add("btn");
+            item.onclick = () => {
+                load_starship_info(index);
+            };
+            list.appendChild(item);
+        }
+    });
+}
+
+function load_starship_info(starship_id) {
+    if(starships_info[starship_id] === undefined)
+        return;
+    let starship = starships_info[starship_id];
+    let header = document.querySelector("#starshipBox > h1");
+    header.innerText = starship.name;
+    let infoList = document.getElementById("SBFlex");
+    infoList.replaceChildren();
+    let simpleItems = ['model', 'manufacturer', 'crew', 'passengers'];
+    simpleItems.forEach(item => {
+        let info = document.createElement("div");
+        info.classList.add("starshipInfo");
+        info.innerText = item + ": " + starship[item];
+        infoList.appendChild(info);
+    });
+    let films = starship.films;
+    films.forEach(film => {
+        let film_info = eps_info[ep_ids[parseInt(film)]];
+        if(film_info === undefined)
+            return;
+        let info = document.createElement("div");
+        info.classList.add("movieLink");
+        info.classList.add("btn");
+        info.innerText = film_info.title;
+        info.onclick = () => {
+            cur_movie_id = film_info.episode_id;
+            load_starship_menu();
+        };
+        infoList.appendChild(info);
+    });
+}
+
+function load_starship_menu() {
+    let backBtn = document.createElement("h3");
+    backBtn.innerText = "Back to Movies";
+    backBtn.id = "BTM_Btn";
+    backBtn.classList.add('swColor');
+    backBtn.classList.add('btn');
+    backBtn.onclick = load_movie_menu;
+
+    page = 0;
+    let starshipList = document.createElement("div");
+    starshipList.id = "starshipListContainer";
+    let listHeader = document.createElement("h1");
+    listHeader.innerText = "Starships";
+    listHeader.classList.add("whiteColor");
+    starshipList.appendChild(listHeader);
+    let list = document.createElement('ul');
+    list.id = "starshipList";
+    starshipList.appendChild(list);
+
+    let navMenu = document.createElement("div");
+    navMenu.classList.add("navMenu");
+    let prevBtn = document.createElement('h5');
+    prevBtn.innerText = "< Prev";
+    prevBtn.classList.add("btn");
+    prevBtn.id = "prevBtn";
+    prevBtn.onclick = () => {
+        if(page > 0) {
+            page--;
+            load_starship_list();
+        }
+    }
+    let nextBtn = document.createElement('h5');
+    nextBtn.innerText = "Next >";
+    nextBtn.classList.add("btn");
+    nextBtn.id = "nextBtn";
+    nextBtn.onclick = () => {
+        page++;
+        load_starship_list();
+    }
+    navMenu.append(prevBtn, nextBtn);
+    starshipList.appendChild(navMenu);
+
+    let starshipBox = document.createElement("div");
+    starshipBox.id = "starshipBox";
+    let boxHeader = document.createElement("h1");
+    boxHeader.innerText = "Select A Starship";
+    boxHeader.classList.add("whiteColor");
+    starshipBox.appendChild(boxHeader);
+    let starshipInfoBox = document.createElement("div");
+    starshipInfoBox.id = "SBFlex";
+    starshipBox.appendChild(starshipInfoBox);
+
+    let flexBox = document.createElement("div");
+    flexBox.classList.add("MBFlex");
+    flexBox.id = "starshipFlex";
+    flexBox.appendChild(backBtn);
+    flexBox.appendChild(starshipList);
+    flexBox.appendChild(starshipBox);
+
+    let mainBox = document.getElementById("mainBox");
+    mainBox.replaceChildren(flexBox);
+    load_starship_list();
 }
 
 fetch_info()
