@@ -1,7 +1,10 @@
-:root {
-    --sw-yello: #FFE81F;
-}
+/*
+ * One general Note: extra padding used for elements used as buttons gives them more clicking room.
+ */
 
+/*
+ * Star Wars Font Family Loaded
+ */
 @font-face {
     font-family: 'Star Jedi';
     src: url('fonts/StarJedi.woff2') format('woff2'),
@@ -11,19 +14,48 @@
     font-display: swap;
 }
 
+/*
+ * Set the background image and use no-repeat, fixed (so that image doesn't scroll)
+ * and center (so that when the image is cut, the cut section will be at the middle) to implement the requested look.
+ * also in the agenda, it was said that the image should be cut. Therefor the "background-size: cover;"
+ * option was not used. and with different screen sizes it's not reasonable to use one background image and cut it.
+ * This way on the small displays there will be no image left. Therefor there were three background images used.
+ * all of them are the same image but with different sizes. because the smallest image has the leas size, first
+ * the smallest image is loaded and if the display size was lager, in "@media screen ... " section
+ * at the end of this file, the background image is changed.
+ *
+ * Set the main font of the webpage in to body and let the other elements inherit it
+ * unless changed in more specific manner.
+ */
 body {
     background-image: url('images/background_LQ.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
     font-family:  sans-serif;
-
 }
 
+/*
+ * h1 element had to large of a margin on top and bottom and none at sides. Which was not compatible with this
+ * webpage. Therefor it was changed.
+ */
 h1 {
     margin: 0.5em;
 }
 
+/*
+ * container class is for mainBox element. This element should provide a easier experience for reading
+ * the text inside it and at the same time not cover the background image too much. Thus this element was
+ * given a transparent background.
+ *
+ * To place the container at the middle of the screen, first its top left corner is placed in the middle of the
+ * screen and after that the box is translated half its width to left and half its height up.
+ *
+ * Padding is set to keep the items inside container from getting to close to the borders.
+ * max-width is set to keep the mainBox from getting to large which won't look nice.
+ * also the "width: fit-content;" ist set to keep the mainBox from getting to small and elements get wrapped for
+ * no reason.
+ */
 .container {
     border-style: solid;
     border-color: grey;
@@ -36,44 +68,60 @@ h1 {
     transform: translate(-50%, -50%);
     padding: 10px;
     max-width: 80%;
-    min-width: 350px;
     width: fit-content;
 }
 
+/*
+ * These next two setting is for elements that have been used as buttons.
+ * cursor will become a pointer when it enters this elements and their brightness will change to indicate selection.
+ */
 .btn {
     cursor: pointer;
 }
-
 .btn:hover {
     filter: brightness(90%);
 }
 
+/*
+ * Elements using this class will have a star wars themed font color
+ */
 .swColor {
     color: #FFE81F;
 }
 
+/*
+ * Elements using this class will have a star wars themed font family
+ */
 .swFont {
     font-family:  "Star Jedi", sans-serif;
 }
 
+/*
+ * Elements using this class will have white font color
+ */
 .whiteColor {
     color: #FFF;
 }
 
+/*
+ * This class is used for flexboxes inside mainBox
+ * "justify-content: space-between" cases the elements to be as far apart as possible. thus when used with
+ * flexboxes that have only two elements (for example in movie_menu page), elements will look justified.
+ * this approach also gives the flexibility of moving items to a vertical positioning when the display is narrow.
+ */
 .MBFlex {
     margin: 0.5em;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: flex-start;
 }
 
-.MBFlex > span {
-    align-self: flex-start;
-}
-
+/*
+ * The design elements to turn the button used for "Starships" button to the desired look.
+ */
 .starshipBtn {
     margin: 3px;
-    align-self: flex-start;
     border-style : none;
     background: #0000;
     color: #FFF;
@@ -81,44 +129,64 @@ h1 {
     font-family: sans-serif;
 }
 
+/*
+ * make starship menu page flex items have better spacing
+ */
 #starshipFlex {
     justify-content: space-around;
 }
 
+/*
+ * make back to movies button vertical.
+ */
 #BTM_Btn {
     writing-mode: vertical-rl;
     margin: auto;
     padding: 0.5em;
 }
 
+/*
+ * make starshipListContainer an inline element and make sure if the width is available its elements fit inside.
+ */
 #starshipListContainer {
     display: inline-block;
-    align-self: flex-start;
     margin: 0.5em;
     flex-grow: 1;
     flex-basis: fit-content;
 }
 
+/*
+ * Set the design elements for list items inside starshipList
+ */
 #starshipList > li {
     color: lime;
     padding: 0.1em;
     margin: 0.2em;
 }
 
+/*
+ * Set the design elements for list items inside starshipBox
+ */
 #starshipBox {
     display: inline-block;
-    align-self: flex-start;
     flex-grow: 1;
     flex-basis: fit-content;
     margin: 0.5em;
 }
 
+/*
+ * make h5 elements inline so that they would sit next to each other.
+ */
 #prevBtn , #nextBtn {
     display: inline-block;
     color: white;
     padding: 0.5em;
 }
 
+/*
+ * make prev and next button floating items so that they stick to left and right side of their container and
+ * set margins so that they dont get to far apart.
+ */
 #prevBtn {
     float: left;
     margin: 0.5em 0.5em 0.5em 2.5em;
@@ -130,6 +198,9 @@ h1 {
 
 }
 
+/*
+ * Set flex options for the flexbox inside starshipBox which contains starshipInfo and movieLink elements.
+ */
 #SBFlex {
     margin: 0.5em;
     display: flex;
@@ -139,6 +210,9 @@ h1 {
     flex-wrap: wrap;
 }
 
+/*
+ * Set the common options for starshipInfo and movieLink elements.
+ */
 .starshipInfo, .movieLink {
     border-radius: 0.5em;
     padding: 0.33em;
@@ -146,17 +220,26 @@ h1 {
     flex-basis: fit-content;
 }
 
+/*
+ * Set the specific font and background color needed for starshipInfo elements.
+ */
 .starshipInfo {
     color: white;
     background-color: purple;
 }
 
+/*
+ * Set the specific font and background color needed for movieLink elements.
+ */
 .movieLink {
     background-color: #eed816;
     font-family:  "Star Jedi", sans-serif;
     color: white;
 }
 
+/*
+ * change the page design from a horizontal layout to a vertical layout when the page gets to narrow.
+ */
 @media screen and (max-width: 800px){
     .MBFlex {
         flex-direction: column;
@@ -180,6 +263,9 @@ h1 {
     }
 }
 
+/*
+ * change background image if screen is larger than the background image in any dimention.
+ */
 @media screen and (min-width: 1326px), screen and (min-height: 1080px){
     body {
         background-image: url('images/background_MQ.jpg');
